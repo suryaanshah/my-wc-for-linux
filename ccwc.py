@@ -1,55 +1,54 @@
-def takefilepath():
-    file_path=str(input("enter file path please: "))
+import argparse
 
+def count_lines(file_content):
+    return file_content.count(b'\n')
 
-def bytesinfile(): # show the bytes of a file
-    takefilepath()
-    try:
-        with open(file_path, 'rb') as file:
-            return len(file.read())
-    except FileNotFoundError:
-        print("Enter the correct path please :) ")
-        return None
+def count_words(file_content):
+    return len(file_content.split())
 
-print("Namaste, this is my implimentation of the wc program in linux in a more user friendly way.")
+def count_bytes(file_content):
+    return len(file_content)
 
-function=input(""" What do you want to do? \n1. Find out number of bytes (type 'c') \n2. Find out number of lines (type 'l')\n3. Find out number of words (type 'w')\n""")
+def main():
+    parser = argparse.ArgumentParser(description="Python clone of the wc command")
     
+    parser.add_argument('files', metavar='FILE', type=str, nargs='+',
+                        help='File(s) to be processed')
+    parser.add_argument('-l', '--lines', action='store_true',
+                        help='print the newline counts')
+    parser.add_argument('-w', '--words', action='store_true',
+                        help='print the word counts')
+    parser.add_argument('-c', '--bytes', action='store_true',
+                        help='print the byte counts')
+    
+    args = parser.parse_args()
+    
+    for file_name in args.files:
+        try:
+            with open(file_name, 'rb') as file:  # Read the file in binary mode
+                content = file.read()
+                
+                line_count = count_lines(content)
+                word_count = count_words(content)
+                byte_count = count_bytes(content)
+                
+                output = []
+                
+                if args.lines:
+                    output.append(str(line_count))
+                if args.words:
+                    output.append(str(word_count))
+                if args.bytes:
+                    output.append(str(byte_count))
+                
+                if not (args.lines or args.words or args.bytes):
+                    output = [str(line_count), str(word_count), str(byte_count)]
+                
+                output.append(file_name)
+                print(' '.join(output))
+        
+        except FileNotFoundError:
+            print(f"wc: {file_name}: No such file or directory")
 
-  # number of lines
-def numoflines():
-    takefilepath()
-    try:
-        with open(file_path, 'rb') as file:
-            lcount=sum(1 for line in file)
-            return lcount
-            
-    except FileNotFoundError:
-        print("Enter the correct path please :) ")
-        return None
-
-# number of words
-def numofwords():
-    takefilepath()
-    try:
-        with open(file_path, 'rb') as file:
-            wcount=len((file.read()).split())
-            return wcountc
-            
-    except FileNotFoundError:
-        print("Enter the correct path please :) ")
-        return None
-
-
-
-
-
-
-
-if function=='c':
-    print(bytesinfile())
-elif function == 'l':
-    print(numoflines())
-elif function == 'w':
-    print(numofwords())
-
+if __name__ == "__main__":
+    main()
