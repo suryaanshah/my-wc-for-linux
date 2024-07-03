@@ -34,7 +34,7 @@ def numofwords():
     try:
         with open(file_path, 'rb') as file:
             wcount=len((file.read()).split())
-            return wcount
+            return wcountc
             
     except FileNotFoundError:
         print("Enter the correct path please :) ")
