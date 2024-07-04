@@ -1,7 +1,11 @@
 import argparse
+import subprocess
 
 def count_lines(file_content):
     return file_content.count(b'\n')
+
+def count_paras(file_content):
+    return file_content.count(b'\n\n')
 
 def count_words(file_content):
     return len(file_content.split())
