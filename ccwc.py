@@ -5,7 +5,7 @@ def count_lines(file_content):
     return file_content.count(b'\n')
 
 def count_paras(file_content):
-    return file_content.count(b'\n\n')
+    return file_content.count(b'\n\n') + 1
 
 def count_words(file_content):
     return len(file_content.split())
@@ -15,15 +15,13 @@ def count_bytes(file_content):
 
 def main():
     parser = argparse.ArgumentParser(description="Python clone of the wc command")
-    
-    parser.add_argument('files', metavar='FILE', type=str, nargs='+',
-                        help='File(s) to be processed')
-    parser.add_argument('-l', '--lines', action='store_true',
-                        help='print the newline counts')
-    parser.add_argument('-w', '--words', action='store_true',
-                        help='print the word counts')
-    parser.add_argument('-c', '--bytes', action='store_true',
-                        help='print the byte counts')
+   
+   # Adding cli arguments
+    parser.add_argument('files', metavar='FILE', type=str, nargs='+', help='File(s) to be processed')
+    parser.add_argument('-l', '--lines', action='store_true', help='print the newline counts')
+    parser.add_argument('-w', '--words', action='store_true', help='print the word counts')
+    parser.add_argument('-c', '--bytes', action='store_true', help='print the byte counts')
+    parser.add_argument('-p', '--paras', action='store_true', help='print the paragraph counts')
     
     args = parser.parse_args()
     
@@ -35,8 +33,10 @@ def main():
                 line_count = count_lines(content)
                 word_count = count_words(content)
                 byte_count = count_bytes(content)
-                
-                output = []
+                para_count = count_paras(content)
+
+
+                output = [] # list to print outputs requested
                 
                 if args.lines:
                     output.append(str(line_count))
@@ -44,9 +44,10 @@ def main():
                     output.append(str(word_count))
                 if args.bytes:
                     output.append(str(byte_count))
-                
-                if not (args.lines or args.words or args.bytes):
-                    output = [str(line_count), str(word_count), str(byte_count)]
+                if args.paras:
+                    output.append(str(para_count))
+                if not (args.lines or args.words or args.bytes or args.paras):
+                    output = [str(line_count), str(word_count), str(byte_count), str(paras_count)]
                 
                 output.append(file_name)
                 print(' '.join(output))
