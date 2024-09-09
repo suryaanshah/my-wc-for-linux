@@ -1,6 +1,9 @@
 # CCWC 
 A `wc` clone written in python.
 
+![image](https://github.com/user-attachments/assets/5ebfd765-1583-4b87-aa5f-e1838c98b5f8)
+
+
 It can:
 + count lines 
 + count bytes
